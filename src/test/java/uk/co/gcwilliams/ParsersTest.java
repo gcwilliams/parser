@@ -104,7 +104,7 @@ class ParsersTest {
     ) {
 
         // act
-        ParserResult<String> result = Parsers.eof().parse(source);
+        ParserResult<Void> result = Parsers.eof().parse(source);
 
         // assert
         assertThat(result)

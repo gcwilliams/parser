@@ -66,9 +66,10 @@ public class Parsers {
      *
      * @return the parser
      */
-    public static Parser<String> eof() {
+    @SuppressWarnings("unchecked")
+    public static Parser<Void> eof() {
         return source -> source.isEmpty()
-            ? ParserResult.success("", "")
+            ? (ParserResult<Void>)(ParserResult<?>)ParserResult.success("", "")
             : ParserResult.failure(source);
     }
 
@@ -644,6 +645,14 @@ public class Parsers {
 
     public interface Mapper9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> { R apply(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9); }
 
+    /**
+     * Creates a infix right parser from the supplied parser and the infix operator
+     *
+     * @param parser the parser
+     * @param infix the infix operator
+     * @param mapper the mapper
+     * @return the parser
+     */
     public static <T, I> Parser<T> infixr(Parser<T> parser, Parser<I> infix, Mapper3<T, I, T, T> mapper) {
         record Rhs<T, I>(I op, T value) { }
         return sequence(parser, many(sequence(infix, parser, Rhs::new)), (value, rhs) -> {
@@ -655,6 +664,14 @@ public class Parsers {
         });
     }
 
+    /**
+     * Creates a infix left parser from the supplied parser and the infix operator
+     *
+     * @param parser the parser
+     * @param infix the infix operator
+     * @param mapper the mapper
+     * @return the parser
+     */
     public static <T, I> Parser<T> infixl(Parser<T> parser, Parser<I> infix, Mapper3<T, I, T, T> mapper) {
         record Rhs<T, I>(I op, T value) { }
         return sequence(parser, many(sequence(infix, parser, Rhs::new)), (value, rhs) -> {
