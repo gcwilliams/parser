@@ -99,7 +99,7 @@ public class Parsers {
      * @return the parser
      */
     public static <T> Parser<List<T>> many(Parser<T> parser) {
-        return between(parser, 0, Integer.MAX_VALUE);
+        return times(parser, 0, Integer.MAX_VALUE);
     }
 
     /**
@@ -109,7 +109,7 @@ public class Parsers {
      * @return the parser
      */
     public static <T> Parser<List<T>> many1(Parser<T> parser) {
-        return between(parser, 1, Integer.MAX_VALUE);
+        return times(parser, 1, Integer.MAX_VALUE);
     }
 
     /**
@@ -120,7 +120,7 @@ public class Parsers {
      * @return the parser
      */
     public static <T> Parser<List<T>> times(Parser<T> parser, int times) {
-        return between(parser, times, times);
+        return times(parser, times, times);
     }
 
     /**
@@ -131,7 +131,7 @@ public class Parsers {
      * @param maximum the maximum number of times
      * @return the parser
      */
-    public static <T> Parser<List<T>> between(Parser<T> parser, int minimum, int maximum) {
+    public static <T> Parser<List<T>> times(Parser<T> parser, int minimum, int maximum) {
         return source -> {
             List<T> results = new ArrayList<>();
             String remaining = source;

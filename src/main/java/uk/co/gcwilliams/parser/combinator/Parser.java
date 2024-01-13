@@ -63,8 +63,8 @@ public interface Parser<T> {
      * @param maximum the maximum number of times
      * @return the parser
      */
-    default Parser<List<T>> between(int minimum, int maximum) {
-        return Parsers.between(this, minimum, maximum);
+    default Parser<List<T>> times(int minimum, int maximum) {
+        return Parsers.times(this, minimum, maximum);
     }
 
     /**
@@ -79,5 +79,34 @@ public interface Parser<T> {
      */
     default <O> Parser<T> followedBy(Parser<O> parser) {
         return Parsers.sequence(this, parser, (__, ___) -> __);
+    }
+
+    /**
+     * Parser the input and returns the value in between
+     *
+     * <pre>{@code
+     * Parser.is("\"Hello\"").between(Parsers.is('"'));
+     * }</pre>
+     *
+     * @param parser the parser for the source before and after the value
+     * @return the parser
+     */
+    default <O> Parser<T> between(Parser<O> parser) {
+        return between(parser, parser);
+    }
+
+    /**
+     * Parser the input and returns the value in between
+     *
+     * <pre>{@code
+     * Parser.is(Character::isDigit).between(Parsers.is('('), Parsers.is(')'));
+     * }</pre>
+     *
+     * @param left the left parser
+     * @param right the right parser
+     * @return the parser
+     */
+    default <O1, O2> Parser<T> between(Parser<O1> left, Parser<O2> right) {
+        return Parsers.sequence(left, this, right, (__, ___, ____) -> ___);
     }
 }

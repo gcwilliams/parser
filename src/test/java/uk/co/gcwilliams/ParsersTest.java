@@ -203,7 +203,7 @@ class ParsersTest {
     ) {
 
         // act
-        ParserResult<List<String>> result = Parsers.between(Parsers.is('a'), 1, 3).parse(source);
+        ParserResult<List<String>> result = Parsers.times(Parsers.is('a'), 1, 3).parse(source);
 
         // assert
         assertThat(result)
@@ -510,7 +510,7 @@ class ParsersTest {
 
         Parsers.Lazy<Integer> lazy = Parsers.lazy();
 
-        Parser<Integer> parser = Parsers.or(Parsers.sequence(open, lazy.ref(), closed, (__, n, ___) -> n), digit);
+        Parser<Integer> parser = Parsers.or(lazy.ref().between(open, closed), digit);
         parser = Parsers.infixl(parser, times, (l, op, r) -> l * r);
         parser = Parsers.infixl(parser, divide, (l, op, r) -> l / r);
         parser = Parsers.infixl(parser, plus, (l, op, r) -> l + r);
