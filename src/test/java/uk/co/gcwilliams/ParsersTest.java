@@ -494,4 +494,36 @@ class ParsersTest {
             .usingRecursiveComparison()
             .isEqualTo(ParserResult.success(21, ""));
     }
+
+    @Test
+    void reference() {
+
+        // arrange
+        Parser<Integer> digit = Parsers.map(Parsers.many1(Parsers.is(Character::isDigit)), values -> Integer.parseInt(String.join("", values)));
+        Parser<String> times = Parsers.is('*');
+        Parser<String> divide = Parsers.is('/');
+        Parser<String> plus = Parsers.is('+');
+        Parser<String> minus = Parsers.is('-');
+
+        Parser<String> open = Parsers.is('(');
+        Parser<String> closed = Parsers.is(')');
+
+        Parsers.Lazy<Integer> lazy = Parsers.lazy();
+
+        Parser<Integer> parser = Parsers.or(Parsers.sequence(open, lazy.ref(), closed, (__, n, ___) -> n), digit);
+        parser = Parsers.infixr(parser, times, (l, op, r) -> l * r);
+        parser = Parsers.infixr(parser, divide, (l, op, r) -> l / r);
+        parser = Parsers.infixr(parser, plus, (l, op, r) -> l + r);
+        parser = Parsers.infixr(parser, minus, (l, op, r) -> l - r);
+
+        lazy.set(parser);
+
+        // act
+        ParserResult<Integer> result = parser.parse("((1+4/2)*123-9)*100");
+
+        // assert
+        assertThat(result)
+            .usingRecursiveComparison()
+            .isEqualTo(ParserResult.success(((1+4/2)*123-9)*100, ""));
+    }
 }

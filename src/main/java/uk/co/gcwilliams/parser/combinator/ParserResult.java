@@ -47,7 +47,7 @@ public class ParserResult<T> {
      * The parser state
      *
      */
-    enum State { SUCCESS, FAILURE }
+    public enum State { SUCCESS, FAILURE }
 
     /**
      * Gets the remaining source

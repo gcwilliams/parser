@@ -6,7 +6,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import uk.co.gcwilliams.parser.combinator.ParserResult;
 import uk.co.gcwilliams.parser.combinator.Parsers;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;

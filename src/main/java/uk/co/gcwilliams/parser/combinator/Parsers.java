@@ -3,8 +3,11 @@ package uk.co.gcwilliams.parser.combinator;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * The parsers
@@ -686,5 +689,59 @@ public class Parsers {
             }
             return mapper.apply(result, rhs.get(0).op(), value);
         });
+    }
+
+    /**
+     * The lazy parser
+     *
+     */
+    public interface Lazy<T> {
+
+        /**
+         * Gets the parser reference
+         *
+         * @return the reference
+         */
+        Parser<T> ref();
+
+        /**
+         * Sets the parser
+         *
+         * @param parser the parser
+         */
+        void set(Parser<T> parser);
+    }
+
+    /**
+     * Creates a reference for a parser which can be set later
+     *
+     * @return the reference
+     */
+    public static <T> Lazy<T> lazy() {
+        return new LazyImpl<>();
+    }
+
+    /**
+     * The reference implementation
+     *
+     */
+    private static class LazyImpl<T> implements Lazy<T>, Parser<T> {
+
+        private final AtomicReference<Parser<T>> reference = new AtomicReference<>();
+
+        @Override
+        public ParserResult<T> parse(String source) {
+            return requireNonNull(reference.get(), "Parser not set").parse(source);
+        }
+
+        @Override
+        public Parser<T> ref() {
+            return this;
+        }
+
+        @Override
+        public void set(Parser<T> parser) {
+            reference.set(parser);
+        }
     }
 }
