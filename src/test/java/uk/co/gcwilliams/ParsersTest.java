@@ -445,7 +445,7 @@ class ParsersTest {
         Parser<String> letter = Parsers.is(Character::isAlphabetic);
         Parser<String> whitespace = Parsers.or(Parsers.is(Character::isWhitespace), Parsers.constant());
 
-        Parser<String> parser = Parsers.infixr(letter, whitespace, (l, op, r) -> r + op + l);
+        Parser<String> parser = Parsers.infixl(letter, whitespace, (l, op, r) -> r + op + l);
 
         // act
         ParserResult<String> result = parser.parse("Hello World");
@@ -463,7 +463,7 @@ class ParsersTest {
         Parser<String> letter = Parsers.is(Character::isAlphabetic);
         Parser<String> whitespace = Parsers.or(Parsers.is(Character::isWhitespace), Parsers.constant());
 
-        Parser<String> parser = Parsers.infixl(letter, whitespace, (l, op, r) -> l + op + r);
+        Parser<String> parser = Parsers.infixr(letter, whitespace, (l, op, r) -> l + op + r);
 
         // act
         ParserResult<String> result = parser.parse("Hello World");
@@ -483,8 +483,8 @@ class ParsersTest {
         Parser<String> times = Parsers.is('*');
 
         Parser<Integer> parser;
-        parser = Parsers.infixr(digit, times, (l, op, r) -> l * r);
-        parser = Parsers.infixr(parser, plus, (l, op, r) -> l + r);
+        parser = Parsers.infixl(digit, times, (l, op, r) -> l * r);
+        parser = Parsers.infixl(parser, plus, (l, op, r) -> l + r);
 
         // act
         ParserResult<Integer> result = parser.parse("1+10*2");
@@ -511,10 +511,10 @@ class ParsersTest {
         Parsers.Lazy<Integer> lazy = Parsers.lazy();
 
         Parser<Integer> parser = Parsers.or(Parsers.sequence(open, lazy.ref(), closed, (__, n, ___) -> n), digit);
-        parser = Parsers.infixr(parser, times, (l, op, r) -> l * r);
-        parser = Parsers.infixr(parser, divide, (l, op, r) -> l / r);
-        parser = Parsers.infixr(parser, plus, (l, op, r) -> l + r);
-        parser = Parsers.infixr(parser, minus, (l, op, r) -> l - r);
+        parser = Parsers.infixl(parser, times, (l, op, r) -> l * r);
+        parser = Parsers.infixl(parser, divide, (l, op, r) -> l / r);
+        parser = Parsers.infixl(parser, plus, (l, op, r) -> l + r);
+        parser = Parsers.infixl(parser, minus, (l, op, r) -> l - r);
 
         lazy.set(parser);
 
