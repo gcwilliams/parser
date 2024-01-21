@@ -439,7 +439,7 @@ class ParsersTest {
     }
 
     @Test
-    void infixr() {
+    void infixl() {
 
         // arrange
         Parser<String> letter = Parsers.is(Character::isAlphabetic);
@@ -457,7 +457,7 @@ class ParsersTest {
     }
 
     @Test
-    void infixl() {
+    void infix() {
 
         // arrange
         Parser<String> letter = Parsers.is(Character::isAlphabetic);
@@ -525,5 +525,87 @@ class ParsersTest {
         assertThat(result)
             .usingRecursiveComparison()
             .isEqualTo(ParserResult.success(((1+4/2)*123-9)*100, ""));
+    }
+
+    static Stream<Arguments> not() {
+        return Stream.of(
+            Arguments.of("bbbb", ParserResult.success("bbbb", "")),
+            Arguments.of("bbaa", ParserResult.success("bb", "aa")),
+            Arguments.of("aaaa", ParserResult.success("", "aaaa"))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("not")
+    <T> void not(
+        String source,
+        ParserResult<T> expected
+    ) {
+
+        // arrange
+        Parser<String> not = Parsers.not(Parsers.is("a"));
+
+        // act
+        ParserResult<String> result = not.parse(source);
+
+        // assert
+        assertThat(result)
+            .usingRecursiveComparison()
+            .isEqualTo(expected);
+    }
+
+    static Stream<Arguments> until() {
+        return Stream.of(
+            Arguments.of("/** This is a comment */", ParserResult.success("This is a comment", "")),
+            Arguments.of("/** This is a comment ", ParserResult.failure("/** This is a comment "))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("until")
+    <T> void until(
+        String source,
+        ParserResult<T> expected
+    ) {
+
+        // arrange
+        Parser<String> commentStart = Parsers.is("/**");
+        Parser<String> commentEnd = Parsers.is("*/");
+        Parser<String> comment = Parsers.until(commentStart, commentEnd, (__, v, ___) -> v.trim());
+
+        // act
+        ParserResult<String> result = comment.parse(source);
+
+        // assert
+        assertThat(result)
+            .usingRecursiveComparison()
+            .isEqualTo(expected);
+    }
+
+    @Test
+    void tokenizes() {
+
+        // assert
+        Parser<String> integer = Parsers.is(Character::isDigit).many1().map(values -> String.join("", values));
+        Parser<String> plus = Parsers.is('+');
+        Parser<String> minus = Parsers.is('-');
+        Parser<String> tokens = Parsers.or(integer, plus, minus);
+
+        Parser<String> whitespace = Parsers.is(Character::isWhitespace);
+        Parser<String> comment = Parsers.until(Parsers.is("/**"), Parsers.is("*/"), (b, c, u) -> b + c + u);
+        Parser<List<String>> ignore = Parsers.or(whitespace, comment).many();
+
+        Parser<List<String>> parser = Parsers.tokenize(tokens, ignore);
+
+        // act
+        ParserResult<List<String>> result = parser.parse("1 + 2 - 3 /** comment */   + 2 3 4    333");
+
+        // assert
+        assertThat(result)
+            .usingRecursiveComparison()
+            .isEqualTo(ParserResult.success(
+                List.of("1", "+", "2", "-", "3", "+", "2", "3", "4", "333"),
+                ""
+            ));
     }
 }

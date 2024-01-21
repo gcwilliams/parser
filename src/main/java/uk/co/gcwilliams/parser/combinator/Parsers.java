@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -212,7 +214,7 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             R mapped = mapper.apply(
                 t1Result.result().orElseThrow(),
@@ -245,11 +247,11 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T3> t3Result = t3.parse(t2Result.remaining());
             if (t3Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t3Result.remaining());
+                return ParserResult.failure(source);
             }
             R mapped = mapper.apply(
                 t1Result.result().orElseThrow(),
@@ -285,15 +287,15 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T3> t3Result = t3.parse(t2Result.remaining());
             if (t3Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t3Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T4> t4Result = t4.parse(t3Result.remaining());
             if (t4Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t4Result.remaining());
+                return ParserResult.failure(source);
             }
             R mapped = mapper.apply(
                 t1Result.result().orElseThrow(),
@@ -332,19 +334,19 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T3> t3Result = t3.parse(t2Result.remaining());
             if (t3Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t3Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T4> t4Result = t4.parse(t3Result.remaining());
             if (t4Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t4Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T5> t5Result = t5.parse(t4Result.remaining());
             if (t5Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t5Result.remaining());
+                return ParserResult.failure(source);
             }
             R mapped = mapper.apply(
                 t1Result.result().orElseThrow(),
@@ -386,23 +388,23 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T3> t3Result = t3.parse(t2Result.remaining());
             if (t3Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t3Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T4> t4Result = t4.parse(t3Result.remaining());
             if (t4Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t4Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T5> t5Result = t5.parse(t4Result.remaining());
             if (t5Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t5Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T6> t6Result = t6.parse(t5Result.remaining());
             if (t6Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t6Result.remaining());
+                return ParserResult.failure(source);
             }
             R mapped = mapper.apply(
                 t1Result.result().orElseThrow(),
@@ -447,27 +449,27 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T3> t3Result = t3.parse(t2Result.remaining());
             if (t3Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t3Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T4> t4Result = t4.parse(t3Result.remaining());
             if (t4Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t4Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T5> t5Result = t5.parse(t4Result.remaining());
             if (t5Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t5Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T6> t6Result = t6.parse(t5Result.remaining());
             if (t6Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t6Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T7> t7Result = t7.parse(t6Result.remaining());
             if (t7Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t7Result.remaining());
+                return ParserResult.failure(source);
             }
             R mapped = mapper.apply(
                 t1Result.result().orElseThrow(),
@@ -514,31 +516,31 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T3> t3Result = t3.parse(t2Result.remaining());
             if (t3Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t3Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T4> t4Result = t4.parse(t3Result.remaining());
             if (t4Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t4Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T5> t5Result = t5.parse(t4Result.remaining());
             if (t5Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t5Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T6> t6Result = t6.parse(t5Result.remaining());
             if (t6Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t6Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T7> t7Result = t7.parse(t6Result.remaining());
             if (t7Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t7Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T8> t8Result = t8.parse(t7Result.remaining());
             if (t8Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t8Result.remaining());
+                return ParserResult.failure(source);
             }
             R mapped = mapper.apply(
                 t1Result.result().orElseThrow(),
@@ -587,19 +589,19 @@ public class Parsers {
             }
             ParserResult<T2> t2Result = t2.parse(t1Result.remaining());
             if (t2Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t2Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T3> t3Result = t3.parse(t2Result.remaining());
             if (t3Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t3Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T4> t4Result = t4.parse(t3Result.remaining());
             if (t4Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t4Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T5> t5Result = t5.parse(t4Result.remaining());
             if (t5Result.state() == ParserResult.State.FAILURE) {
-                return ParserResult.failure(t5Result.remaining());
+                return ParserResult.failure(source);
             }
             ParserResult<T6> t6Result = t6.parse(t5Result.remaining());
             if (t6Result.state() == ParserResult.State.FAILURE) {
@@ -743,5 +745,51 @@ public class Parsers {
         public void set(Parser<T> parser) {
             reference.set(parser);
         }
+    }
+
+    /**
+     * A parser that continually succeeds until the supplied parser succeeds, fails if EOF is reached.
+     *
+     * @param parser the parser
+     * @return the parser
+     */
+    public static <T> Parser<String> not(Parser<T> parser) {
+        Parser<String> not = source -> {
+            if (source.isEmpty()) {
+                return ParserResult.failure(source);
+            }
+            ParserResult<T> result = parser.parse(source);
+            return result.state() == ParserResult.State.SUCCESS
+                ? ParserResult.failure(source)
+                : ParserResult.success(Character.toString(source.charAt(0)), source.substring(1));
+        };
+        return not.many().map(v -> String.join("", v));
+    }
+
+    /**
+     * A parser that starts with begin, consumes the input until until succeeds, and maps the result
+     *
+     * @param begin the begin parser
+     * @param until the until parser
+     * @param map the mapper
+     * @return the parser
+     */
+    public static <T, U, R> Parser<R> until(Parser<T> begin, Parser<U> until, Mapper3<T, String, U, R> map) {
+        return sequence(begin, not(until), until, (p, vs, u) -> map.apply(p, String.join("", vs), u));
+    }
+
+    /**
+     * Creates a parser which tokenizes the source input
+     *
+     * @param tokens the tokens
+     * @param skip the parser to skip
+     * @return the parser
+     */
+    public static Parser<List<String>> tokenize(Parser<String> tokens, Parser<?> skip) {
+        return sequence(
+            tokens,
+            many(sequence(skip, tokens, (__, t) -> t)),
+            (t, ts) -> Stream.concat(Stream.of(t), ts.stream()).collect(Collectors.toList())
+        ).followedBy(Parsers.eof());
     }
 }

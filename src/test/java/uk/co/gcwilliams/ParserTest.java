@@ -20,7 +20,7 @@ class ParserTest {
     static Stream<Arguments> followedBy() {
         return Stream.of(
             Arguments.of("Hello", ParserResult.success("Hello", "")),
-            Arguments.of("Hello World", ParserResult.failure(" World"))
+            Arguments.of("Hello World", ParserResult.failure("Hello World"))
         );
     }
 
