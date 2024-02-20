@@ -1,5 +1,7 @@
 package uk.co.gcwilliams.parser.combinator;
 
+import uk.co.gcwilliams.parser.combinator.Mapper.Mapper3;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -108,5 +110,24 @@ public interface Parser<T> {
      */
     default <O1, O2> Parser<T> between(Parser<O1> left, Parser<O2> right) {
         return Parsers.sequence(left, this, right, (__, ___, ____) -> ___);
+    }
+
+    /**
+     * A parser that starts with begin, consumes the input until the specified parser succeeds, and maps the result
+     *
+     * @param until the until parser
+     * @param map the mapper
+     * @return the parser
+     */
+    default <U, R> Parser<R> until(Parser<U> until, Mapper3<T, String, U, R> map) {
+        return Parsers.until(this, until, map);
+    }
+
+    /**
+     * Creates a token parser from the current parser
+     *
+     */
+    default TokenParser<T> token() {
+        return TokenParsers.token(this);
     }
 }

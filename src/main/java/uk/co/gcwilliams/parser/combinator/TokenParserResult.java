@@ -3,26 +3,26 @@ package uk.co.gcwilliams.parser.combinator;
 import java.util.Optional;
 
 /**
- * The parser result
+ * The token parser result
  *
  * @author : Gareth Williams
  **/
-public class ParserResult<T> {
+public class TokenParserResult<T> {
 
     private final T result;
 
     private final State state;
 
-    private final String remaining;
+    private final TokenContext ctx;
 
-    private ParserResult(
+    private TokenParserResult(
             T result,
             State state,
-            String remaining
+            TokenContext ctx
     ) {
         this.result = result;
         this.state = state;
-        this.remaining = remaining;
+        this.ctx = ctx;
     }
 
     /**
@@ -44,12 +44,12 @@ public class ParserResult<T> {
     }
 
     /**
-     * Gets the remaining source
+     * Gets the context source
      *
-     * @return the remaining source
+     * @return the context source
      */
-    public String remaining() {
-        return remaining;
+    public TokenContext ctx() {
+        return ctx;
     }
 
     /**
@@ -62,20 +62,20 @@ public class ParserResult<T> {
      * Creates a successful parser result
      *
      * @param result the result
-     * @param remaining the remaining source
+     * @param ctx the context
      * @return the parser result
      */
-    public static <T> ParserResult<T> success(T result, String remaining) {
-        return new ParserResult<>(result, State.SUCCESS, remaining);
+    public static <T> TokenParserResult<T> success(T result, TokenContext ctx) {
+        return new TokenParserResult<>(result, State.SUCCESS, ctx);
     }
 
     /**
      * Creates a failure parser result
      *
-     * @param source the source
+     * @param ctx the context
      * @return the parser result
      */
-    public static <T> ParserResult<T> failure(String source) {
-        return new ParserResult<>(null, State.FAILURE, source);
+    public static <T> TokenParserResult<T> failure(TokenContext ctx) {
+        return new TokenParserResult<>(null, State.FAILURE, ctx);
     }
 }

@@ -581,31 +581,4 @@ class ParsersTest {
             .usingRecursiveComparison()
             .isEqualTo(expected);
     }
-
-    @Test
-    void tokenizes() {
-
-        // assert
-        Parser<String> integer = Parsers.is(Character::isDigit).many1().map(values -> String.join("", values));
-        Parser<String> plus = Parsers.is('+');
-        Parser<String> minus = Parsers.is('-');
-        Parser<String> tokens = Parsers.or(integer, plus, minus);
-
-        Parser<String> whitespace = Parsers.is(Character::isWhitespace);
-        Parser<String> comment = Parsers.until(Parsers.is("/**"), Parsers.is("*/"), (b, c, u) -> b + c + u);
-        Parser<List<String>> ignore = Parsers.or(whitespace, comment).many();
-
-        Parser<List<String>> parser = Parsers.tokenize(tokens, ignore);
-
-        // act
-        ParserResult<List<String>> result = parser.parse("1 + 2 - 3 /** comment */   + 2 3 4    333");
-
-        // assert
-        assertThat(result)
-            .usingRecursiveComparison()
-            .isEqualTo(ParserResult.success(
-                List.of("1", "+", "2", "-", "3", "+", "2", "3", "4", "333"),
-                ""
-            ));
-    }
 }

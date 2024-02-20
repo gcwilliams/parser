@@ -6,10 +6,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper2;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper3;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper4;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper5;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper6;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper7;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper8;
+import static uk.co.gcwilliams.parser.combinator.Mapper.Mapper9;
 
 /**
  * The parsers
@@ -634,22 +640,6 @@ public class Parsers {
         };
     }
 
-    public interface Mapper2<T1, T2, R> { R apply(T1 t1, T2 t2); }
-
-    public interface Mapper3<T1, T2, T3, R> { R apply(T1 t1, T2 t2, T3 t3); }
-
-    public interface Mapper4<T1, T2, T3, T4, R> { R apply(T1 t1, T2 t2, T3 t3, T4 t4); }
-
-    public interface Mapper5<T1, T2, T3, T4, T5, R> { R apply(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5); }
-
-    public interface Mapper6<T1, T2, T3, T4, T5, T6, R> { R apply(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6); }
-
-    public interface Mapper7<T1, T2, T3, T4, T5, T6, T7, R> { R apply(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7); }
-
-    public interface Mapper8<T1, T2, T3, T4, T5, T6, T7, T8, R> { R apply(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8); }
-
-    public interface Mapper9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> { R apply(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9); }
-
     /**
      * Creates a infix left parser from the supplied parser and the infix operator
      *
@@ -767,7 +757,7 @@ public class Parsers {
     }
 
     /**
-     * A parser that starts with begin, consumes the input until until succeeds, and maps the result
+     * A parser that starts with begin, consumes the input until the specified parser succeeds, and maps the result
      *
      * @param begin the begin parser
      * @param until the until parser
@@ -776,20 +766,5 @@ public class Parsers {
      */
     public static <T, U, R> Parser<R> until(Parser<T> begin, Parser<U> until, Mapper3<T, String, U, R> map) {
         return sequence(begin, not(until), until, (p, vs, u) -> map.apply(p, String.join("", vs), u));
-    }
-
-    /**
-     * Creates a parser which tokenizes the source input
-     *
-     * @param tokens the tokens
-     * @param skip the parser to skip
-     * @return the parser
-     */
-    public static Parser<List<String>> tokenize(Parser<String> tokens, Parser<?> skip) {
-        return sequence(
-            tokens,
-            many(sequence(skip, tokens, (__, t) -> t)),
-            (t, ts) -> Stream.concat(Stream.of(t), ts.stream()).collect(Collectors.toList())
-        ).followedBy(Parsers.eof());
     }
 }
